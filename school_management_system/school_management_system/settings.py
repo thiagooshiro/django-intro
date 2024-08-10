@@ -125,16 +125,16 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'school_management_db',  # Replace with your database name
-        'USER': 'root',       # Replace with your MySQL user
-        'PASSWORD': 'in12345678', # Replace with your MySQL password
-        'HOST': 'localhost',             # Or your database host
-        'PORT': '3306',                  # Default MySQL port
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'school_management_db',  # Replace with your database name
+#         'USER': 'root',       # Replace with your MySQL user
+#         'PASSWORD': 'in12345678', # Replace with your MySQL password
+#         'HOST': 'localhost',             # Or your database host
+#         'PORT': '3306',                  # Default MySQL port
+#     }
+# }
 
 CORS_ALLOW_ALL_ORIGINS = True
 
