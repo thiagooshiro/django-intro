@@ -4,6 +4,8 @@ from .models import Teacher
 import json
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
+from django.shortcuts import get_object_or_404
+
 
 @method_decorator(csrf_exempt, name='dispatch')
 class TeacherListView(View):
