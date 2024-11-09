@@ -4,12 +4,12 @@ from courses.models import Courses
 class Teacher(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
-    courses = models.ForeignKey(Courses, related_name='teachers')
+    courses = models.ForeignKey(Courses, on_delete=models.DO_NOTHING, related_name='teachers')
     email = models.EmailField(unique=True)
     active = models.BooleanField(default=True)
     birth_date = models.DateField()
     hiring_date = models.DateField()
-    salary = models.DecimalField(max_digits=10, decimal_places=2)
+    salary = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     
     def __str__(self):
         return f"{self.first_name} {self.last_name}"

@@ -1,6 +1,7 @@
 from django.http import JsonResponse
 from django.views import View
 from .models import Teacher
+from courses.models import Courses
 import json
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
@@ -39,6 +40,8 @@ class TeacherCreateView(View):
 
         if errors:
             return JsonResponse(errors, status=400)
+        
+        
 
         # Criar o professor
         teacher = Teacher.objects.create(
@@ -49,6 +52,17 @@ class TeacherCreateView(View):
             hiring_date=data['hiring_date'],
             salary=data['salary'],
         )
+
+        if 'courses' in data:
+            courses = Courses.objects.filter(id__in=data['courses'])
+            if not courses:
+                errors['courses'] = "Alguns cursos não foram encontrados."
+                return JsonResponse(errors, status=400)
+            
+            # Atribuindo os cursos ao professor (relações de chave estrangeira)
+            teacher.courses.set(courses)  # 'set()' é utilizado para relações many-to-many
+
+        teacher.save()
 
         return JsonResponse({'id': teacher.id}, status=201)
 
