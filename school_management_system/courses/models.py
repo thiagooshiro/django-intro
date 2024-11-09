@@ -17,7 +17,7 @@ class Courses(models.Model):
     ]
 
 
-    name = models.CharField(max_length=100, choices=COURSE_CHOICES)
+    name = models.CharField(max_length=100, choices=COURSE_CHOICES, unique=True)
     description = models.CharField(max_length=200)
 
     def __str__(self):
