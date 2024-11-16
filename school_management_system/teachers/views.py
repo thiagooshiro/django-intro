@@ -15,7 +15,6 @@ class TeacherListView(View):
         teachers = list(Teacher.objects.values())
         return JsonResponse(teachers, safe=False)
 
-
 @method_decorator(csrf_exempt, name='dispatch')
 class TeacherCreateView(View):
     def post(self, request):
@@ -37,11 +36,17 @@ class TeacherCreateView(View):
             errors['hiring_date'] = "Este campo é obrigatório."
         if 'salary' not in data or not data['salary']:
             errors['salary'] = "Este campo é obrigatório."
+        if 'courses' not in data or not data['courses']:
+            errors['courses'] = "Este campo é obrigatório."
 
         if errors:
             return JsonResponse(errors, status=400)
-        
-        
+
+        # Valida o curso antes de criar o professor
+        try:
+            course = Courses.objects.get(id=data['courses'])  # Espera um único ID
+        except Courses.DoesNotExist:
+            return JsonResponse({'courses': "Curso não encontrado."}, status=400)
 
         # Criar o professor
         teacher = Teacher.objects.create(
@@ -51,18 +56,8 @@ class TeacherCreateView(View):
             birth_date=data['birth_date'],
             hiring_date=data['hiring_date'],
             salary=data['salary'],
+            courses=course,  # Associar o curso diretamente
         )
-
-        if 'courses' in data:
-            courses = Courses.objects.filter(id__in=data['courses'])
-            if not courses:
-                errors['courses'] = "Alguns cursos não foram encontrados."
-                return JsonResponse(errors, status=400)
-            
-            # Atribuindo os cursos ao professor (relações de chave estrangeira)
-            teacher.courses.set(courses)  # 'set()' é utilizado para relações many-to-many
-
-        teacher.save()
 
         return JsonResponse({'id': teacher.id}, status=201)
 
